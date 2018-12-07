@@ -2,33 +2,56 @@ package nbslink
 
 import (
 	"sync"
-	"nbserr"
+	"github.com/kprc/nbsdht/nbserr"
 )
 
 type HashBucket struct {
 	Node *LinkNode
 	M sync.RWMutex
-	Cnt int
+	Cnt uint
 }
 
 type HLNode interface {
-	Hash() uint64
+	Hash() uint
 	Equals(node interface{}) bool
 }
 
 type HashLink struct {
 	Hbs []HashBucket
-	HashMax uint64
+	HashMax uint
+}
+
+type IHashLink interface {
+	Add(node interface{}) error
+	AddNode(node *LinkNode) error
+	Remove(node interface{}) error
+	RemoveNode(node *LinkNode) error
+	Find(node interface{}) (HLNode,error)
+	Length(node interface{}) (uint,error)
 }
 
 
 func NewHashLink(max uint) *HashLink{
-	if max<1 || max>31{
+	if max<1 || max>160{
 		return nil
 	}
-	return &HashLink{Hbs:make([]HashBucket,1 << max),HashMax:1<<max}
+	return &HashLink{Hbs:make([]HashBucket,max),HashMax:uint(max)}
 }
 
+func (hl *HashLink)Length(node interface{}) (uint,error){
+	hcnt := node.(HLNode).Hash()
+	if hcnt > hl.HashMax-1 {
+		return 0,nbserr.NbsErr{"Hash Code calculate error ",nbserr.ERROR_DEFAULT}
+	}
+
+	hb := &hl.Hbs[hcnt]
+	hb.M.Lock()
+	defer hb.M.Unlock()
+
+	cnt:= hb.Cnt
+
+	return cnt,nil
+}
 
 func (hl *HashLink)Add(node interface{}) error{
 
@@ -92,6 +115,7 @@ func (hl *HashLink)RemoveNode(node *LinkNode) error {
 			hb.Node = nil
 		}else {
 			hb.Node = hb.Node.Next()
+			nxt.Remove()
 		}
 	}else {
 		node.Remove()
@@ -126,6 +150,7 @@ func (hl *HashLink)Remove(node interface{}) error{
 					hb.Node = nil
 				}else {
 					hb.Node = hb.Node.Next()
+					nxt.Remove()
 				}
 			}else {
 				hn.Remove()

@@ -19,15 +19,12 @@ func (s *Stack)PopNode() *PNode{
 	s.M.Lock()
 	defer s.M.Unlock()
 
-
 	if s.top == nil{
 		return nil
 	}
 
 	node := s.top
-
 	s.top = s.top.next
-
 	s.cnt --
 
 	return node
