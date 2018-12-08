@@ -115,7 +115,7 @@ func (hl *HashLink)RemoveNode(node *LinkNode) error {
 			hb.Node = nil
 		}else {
 			hb.Node = hb.Node.Next()
-			nxt.Remove()
+			node.Remove()
 		}
 	}else {
 		node.Remove()
@@ -150,7 +150,7 @@ func (hl *HashLink)Remove(node interface{}) error{
 					hb.Node = nil
 				}else {
 					hb.Node = hb.Node.Next()
-					nxt.Remove()
+					hn.Remove()
 				}
 			}else {
 				hn.Remove()

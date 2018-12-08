@@ -99,7 +99,7 @@ func removeOldNode(hb *nbslink.HashBucket){
 			hb.Node = nil
 		}else {
 			hb.Node = hb.Node.Next()
-			nxt.Remove()
+			max.Remove()
 		}
 	}else {
 		max.Remove()
