@@ -1,6 +1,9 @@
 package nbsid
 
-import "sync"
+import (
+	"sync"
+	"time"
+)
 
 type INodeID interface {
 	String() string
@@ -43,7 +46,8 @@ func GetLocalId() INodeID  {
 	if localId == nil {
 		glock.Lock()
 		if localId == nil{
-			localId = NewID("localid")
+			ts := string(time.Now().UnixNano())
+			localId = NewID("localid"+ts)
 		}
 		glock.Unlock()
 	}
