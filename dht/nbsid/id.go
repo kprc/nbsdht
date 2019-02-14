@@ -47,7 +47,7 @@ func GetLocalId() INodeID  {
 		glock.Lock()
 		if localId == nil{
 			ts := string(time.Now().UnixNano())
-			localId = NewID("localid"+ts)
+			localId = NewID("nbsid"+ts)
 		}
 		glock.Unlock()
 	}
