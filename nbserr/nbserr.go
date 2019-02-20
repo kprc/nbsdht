@@ -1,6 +1,7 @@
 package nbserr
 
 const (
+
 	REGERR = 101
 	EXE_NOHANDLE = 201
 	SERVER_RESOLVE_UDP_ERR=301
@@ -29,6 +30,8 @@ const (
 	UDP_CONN_EXISTS = 1025
 
 
+	PEER_RUNNING = 1100
+	PEER_DEAD = 1101
 
 
 
