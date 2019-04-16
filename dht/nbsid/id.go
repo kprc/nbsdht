@@ -36,7 +36,7 @@ func (id *NodeID)Bytes() []byte {
 
 func NewID(strid string)INodeID {
 
-	nid:=&NodeID{strid,nil}
+	nid:=&NodeID{strid,[]byte(strid)}
 	//nid.id = "localid"
 
 	return nid
